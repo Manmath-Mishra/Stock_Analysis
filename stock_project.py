@@ -7,7 +7,7 @@ import numpy as np
 import streamlit as st
 
 def scrap_headlines(ticker):
-    URL="https://finance.yahoo.com/quote/"+ticker
+    URL="https://finance.yahoo.com/quote/"+ticker.upper()
     html_data= requests.get(URL).text
     soup= BeautifulSoup(html_data,'html.parser')
     articles=[]
@@ -38,8 +38,22 @@ def create_dashboard():
         st.write("Summary:-",st_info['longBusinessSummary'],"\n")
 
         st.subheader("Previous 5 day analysis")
+        
         st.dataframe(st_data,width=1920)
         st.write("\n")
+        st.subheader("Statistics")
+        col1,col2,col3,col4= st.columns(4)
+        with col1:
+            st.dataframe(st_data[['Open']].agg(['min','max','mean','median']),width=1920)
+
+        with col2:
+            st.dataframe(st_data[['Close']].agg(['min','max','mean','median']),width=1920)
+        
+        with col3:
+            st.dataframe(st_data[['High']].agg(['min','max','mean','median']),width=1920)
+
+        with col4:
+            st.dataframe(st_data[['Low']].agg(['min','max','mean','median']),width=1920)
         st.header(':orange[Graphs]')
         
         col1,col2 = st.columns(2,gap="large")
