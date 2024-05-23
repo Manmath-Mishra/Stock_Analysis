@@ -75,7 +75,7 @@ def create_dashboard():
 
 
         st.divider()
-        st.header(f":orange[Financial News ({st_info['shortName']})]")
+        st.header(f":orange[Financial News ({st_info['longName']})]")
         articles= scrap_headlines(ticker)
         if (len(articles)==0):
             st.error("Sorry unable to procure news")
