@@ -20,6 +20,12 @@ def scrap_headlines(ticker):
 
 
 def create_dashboard():
+    st.set_page_config(
+    page_title="Stock Predicter",
+    page_icon="📈",
+    layout="wide",
+
+)
     
     st.title('Stock Market Analysis Dashboard')
 
