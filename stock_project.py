@@ -13,7 +13,7 @@ def scrap_headlines(ticker):
     articles=[]
     for data in soup.find_all('h3'):
         if(len(data.get('class','default'))>1):
-            if(data.get('class','default')[1]=='svelte-1v1zaak'):
+            if(data.get('class','default')[1]=='svelte-w835pj'):
                 if('gemini' not in data.parent.attrs['href'] ):
                     articles.append([data.parent.attrs['href'],data.text])
     return articles
