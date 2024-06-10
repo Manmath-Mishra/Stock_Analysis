@@ -7,32 +7,22 @@ import numpy as np
 import streamlit as st
 
 def scrap_headlines(ticker):
-    URL="https://finance.yahoo.com/quote/"+ticker.upper()
-    html_data= requests.get(URL).text
-    soup= BeautifulSoup(html_data,'html.parser')
+    
     articles=[]
-    for data in soup.find_all('h3'):
-        if(len(data.get('class','default'))>1):
-            if(data.get('class','default')[1]=='svelte-w835pj'):
-                if('gemini' not in data.parent.attrs['href'] ):
-                    articles.append([data.parent.attrs['href'],data.text])
+    for news in ticker.news:
+        articles.append([news['link'],news['title']])
     return articles
 
 
-def create_dashboard():
-    st.set_page_config(
-    page_title="Stock Predicter",
-    page_icon="📈",
-    layout="wide",
-
-)
-    
+def Home():
+     
     st.title('Stock Market Analysis Dashboard')
 
     # Text input for stock ticker
     ticker = st.text_input('Enter Stock Ticker', 'AAPL')
     try:
         stock= yf.Ticker(ticker)
+        
         st_data= stock.history(period="5d")
         st.info('Additional information')
         st_info = stock.info
@@ -62,21 +52,14 @@ def create_dashboard():
             st.dataframe(st_data[['Low']].agg(['min','max','mean','median']),width=1920)
         st.header(':orange[Graphs]')
         
-        col1,col2 = st.columns(2,gap="large")
-        with col1:
-            fig = px.line(st_data, x=st_data.index, y='Close', title=f"{st_info['shortName']} Closing Prices",markers=True)
-            fig.update_yaxes(title_text=f"Closing Prices ({st_info['financialCurrency']})")
-            st.plotly_chart(fig)
-        with col2:
-            fig = px.line(st_data, x=st_data.index, y='Open', title=f"{st_info['shortName']} Opening Prices",markers=True)
-            fig.update_yaxes(title_text=f"opening Prices ({st_info['financialCurrency']})")
-            st.plotly_chart(fig)
+        fig = px.line(st_data, x=st_data.index, y=['Close','Open'], title=f"{st_info['shortName']} Closing & Opening Prices",markers=True)
+        fig.update_yaxes(title_text=f"Prices(Close and Open) ({st_info['financialCurrency']})")
+        st.plotly_chart(fig,use_container_width=True)
 
-
-
+        
         st.divider()
-        st.header(f":orange[Financial News ({st_info['longName']})]")
-        articles= scrap_headlines(ticker)
+        st.header(f":orange[Financial News ({st_info['shortName']})]")
+        articles= scrap_headlines(stock)
         if (len(articles)==0):
             st.error("Sorry unable to procure news")
         for i in range(len(articles)):
@@ -85,10 +68,25 @@ def create_dashboard():
                 st.subheader(f'{i+1}.{articles[i][1]}')
             with col2:
                 st.page_link(articles[i][0],label=":blue[Read More...]")
-    except:
-        st.error("No such ticker available!")
+    except :
+
+        st.error("No such ticker available")
         st.error("Please try another")
+
+def Calculator():
+    st.title("Under Construction")   
+
+pages = {
+    "Home📈": Home,
+    "Calculator🔢":Calculator
     
-        
-    
-create_dashboard()
+}
+st.set_page_config(
+        page_title="Stock Predicter",
+        page_icon="📈",
+        layout="wide",
+    )
+st.sidebar.title("Navigation")
+selection=st.sidebar.radio("Pages",list(pages.keys()))
+pages[selection]()
+
