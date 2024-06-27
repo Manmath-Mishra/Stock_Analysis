@@ -7,7 +7,6 @@ import numpy as np
 import streamlit as st
 
 def scrap_headlines(ticker):
-    
     articles=[]
     for news in ticker.news:
         articles.append([news['link'],news['title']])
