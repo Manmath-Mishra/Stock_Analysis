@@ -20,7 +20,7 @@ def Home():
 
     # Text input for stock ticker
     ticker = st.text_input('Enter Stock Ticker', 'AAPL')
-    try:
+    
         stock= yf.Ticker(ticker)
         
         st_data= stock.history(period="5d")
@@ -68,10 +68,10 @@ def Home():
                 st.subheader(f'{i+1}.{articles[i][1]}')
             with col2:
                 st.page_link(articles[i][0],label=":blue[Read More...]")
-    except :
+    # except :
 
-        st.error("No such ticker available")
-        st.error("Please try another")
+    #     st.error("No such ticker available")
+    #     st.error("Please try another")
 
 def Calculator():
     pass    
