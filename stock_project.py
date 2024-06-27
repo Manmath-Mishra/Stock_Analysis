@@ -69,8 +69,7 @@ def Home():
                 st.page_link(articles[i][0],label=":blue[Read More...]")
     except Exception as e:
 
-        pass
-        
+        st.error("No such Ticker available!")
        
 
 def Calculator():
