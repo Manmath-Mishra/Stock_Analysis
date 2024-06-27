@@ -74,7 +74,7 @@ def Home():
         st.error("Please try another")
 
 def Calculator():
-    st.title("Under Construction")   
+    pass    
 
 pages = {
     "Home📈": Home,
