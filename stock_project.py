@@ -7,6 +7,7 @@ import numpy as np
 import streamlit as st
 
 def scrap_headlines(ticker):
+    
     articles=[]
     for news in ticker.news:
         articles.append([news['link'],news['title']])
@@ -55,7 +56,6 @@ def Home():
         fig.update_yaxes(title_text=f"Prices(Close and Open) ({st_info['financialCurrency']})")
         st.plotly_chart(fig,use_container_width=True)
 
-        
         st.divider()
         st.header(f":orange[Financial News ({st_info['shortName']})]")
         articles= scrap_headlines(stock)
@@ -67,10 +67,10 @@ def Home():
                 st.subheader(f'{i+1}.{articles[i][1]}')
             with col2:
                 st.page_link(articles[i][0],label=":blue[Read More...]")
-    except :
+    except Exception as e:
 
-        st.error("No such ticker available")
-        st.error("Please try another")
+        st.error(e)
+       
 
 def Calculator():
     st.title('Page under construction!!')    
